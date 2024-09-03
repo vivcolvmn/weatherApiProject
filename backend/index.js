@@ -2,29 +2,39 @@ import express from 'express';
 import fetch from 'node-fetch'
 import cors from 'cors';
 import dotenv from 'dotenv';
-import weather from './routes/weather.js';
+import { getWeatherByCity } from "./services/weatherService.js"
+
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 const apiKey = process.env.OPENWEATHERMAP_API_KEY;
-console.log(apiKey);
 
 app.use(express.json());
 app.use(cors());
-app.use('/', weather);
 
 app.get('/', (req, res) => {
+    console.log('Root is hit')
     res.send('Welcome to the Weather App!');
   });
 
+app.get('/api/weather/:city', async (req, res) => {
+  console.log('Root is hit')
+  try {
+    const { city } = req.params;
+    const weatherData = await getWeatherByCity(city);
+    res.json(weatherData);
+  } catch (error) {
+      res.status(500).json({ error: 'Unable to fetch weather data' });
+  }
+});
 
 app.get('/api/weather', async (req, res) => {
+  console.log('Root is hit')
   const { city } = req.query;
   console.log(city);
 
   try {
-
     const response = await fetch(
       `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
     );
