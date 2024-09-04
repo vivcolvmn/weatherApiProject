@@ -6,7 +6,7 @@ function App() {
     const [weather, setWeather] = useState(null);
 
     const fetchWeather = async () => {
-        const response = await fetch(`http://localhost:5000/api/weather/${city}`);
+        const response = await fetch(`/api/weather?city=${city}`);
         const data = await response.json();
         setWeather(data);
     };
