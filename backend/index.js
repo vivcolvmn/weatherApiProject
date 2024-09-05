@@ -36,7 +36,7 @@ app.get('/api/weather', async (req, res) => {
 
   try {
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial`
     );
 
     if (!response.ok) {
@@ -44,8 +44,9 @@ app.get('/api/weather', async (req, res) => {
     }
 
     const data = await response.json();
-    console.log(`This is the data: ${data}`)
     res.json(data);
+    console.log(`This is the data keys: ${Object.keys(data)}`);
+    console.log(`This is the data values: ${Object.values(data)}`)
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
